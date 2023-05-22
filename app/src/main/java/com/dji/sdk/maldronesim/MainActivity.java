@@ -1,5 +1,7 @@
 package com.dji.sdk.maldronesim;
 
+import static dji.log.GlobalConfig.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,9 +10,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import dji.common.flightcontroller.Attitude;
 import dji.common.flightcontroller.FlightControllerState;
@@ -65,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onUpdate(@NonNull FlightControllerState djiFlightControllerCurrentState) {
 
+                    FirebaseFirestore db = FirebaseFirestore.getInstance();
+
                     LocationCoordinate3D locationCoordinate3D = djiFlightControllerCurrentState.getAircraftLocation();
                     Attitude attitude = djiFlightControllerCurrentState.getAttitude();
 
@@ -79,10 +89,45 @@ public class MainActivity extends AppCompatActivity {
                     mTSPI.setPitch(attitude.pitch);
                     mTSPI.setYaw(attitude.yaw);
 
-                    //logs.setText(mTSPI.logResults());
                     writeLogfile(mContext,fileName,mTSPI.logResults());
-                    // 파이어베이스 업로드
                     Log.d("(Thread)TSPILogger", "hello from logger");
+
+                    HashMap result = new HashMap<>();
+                    result.put("Time",  Calendar.getInstance().getTime());
+                    result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
+                    result.put("Altitude", locationCoordinate3D.getAltitude());
+                    result.put("Latitude", locationCoordinate3D.getLatitude());
+                    result.put("Longitude", locationCoordinate3D.getLongitude());
+                    result.put("Pitch", attitude.pitch);
+                    result.put("Yaw", attitude.yaw);
+
+                    if (!(Float.isNaN((float)result.get("Latitude"))) && !(Float.isNaN((float)result.get("Longitude")))){
+                        db.collection("mal_test1").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+                    }
+                    else{
+                        System.out.println("Latitude and Logitude are NaN");
+                    }
+//                    db.collection("mal_drone_test1").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                        @Override
+//                        public void onSuccess(DocumentReference documentReference) {
+//                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Log.w(TAG, "Error adding document", e);
+//                        }
+//                    });
 
                 }
             });
