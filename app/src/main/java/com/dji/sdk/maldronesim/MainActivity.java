@@ -73,17 +73,13 @@ public class MainActivity extends AppCompatActivity {
                     mTSPI.setSatelliteCount(djiFlightControllerCurrentState.getSatelliteCount());
                     mTSPI.setCurrentLatitude(locationCoordinate3D.getLatitude());
                     mTSPI.setCurrentLongitude(locationCoordinate3D.getLongitude());
-
                     mTSPI.setCurrentAltitude(locationCoordinate3D.getAltitude());
-
                     mTSPI.setPitch(attitude.pitch);
-                    mTSPI.setYaw(attitude.yaw);
 
                     //logs.setText(mTSPI.logResults());
                     writeLogfile(mContext,fileName,mTSPI.logResults());
                     // 파이어베이스 업로드
                     Log.d("(Thread)TSPILogger", "hello from logger");
-
                 }
             });
         }
