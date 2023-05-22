@@ -1,5 +1,6 @@
 package com.dji.sdk.maldronesim;
 
+import static java.lang.Double.isNaN;
 import static dji.log.GlobalConfig.TAG;
 
 import androidx.annotation.NonNull;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     result.put("Pitch", attitude.pitch);
                     result.put("Yaw", attitude.yaw);
 
-                    if (!(Float.isNaN((float)result.get("Latitude"))) && !(Float.isNaN((float)result.get("Longitude")))){
+                    if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
                         db.collection("mal_test1").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
