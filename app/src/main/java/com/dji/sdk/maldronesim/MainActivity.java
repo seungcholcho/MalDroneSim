@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                    쓰는 코드 입니다.
                     HashMap result = new HashMap<>();
-                    result.put("Time",  Calendar.getInstance().getTime());
+                    result.put("Time",  Calendar.getInstance().getTimeInMillis());
                     result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
                     result.put("Altitude", locationCoordinate3D.getAltitude());
                     result.put("Latitude", locationCoordinate3D.getLatitude());
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
-                        db.collection("mal_test1").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        db.collection("mal_test3_millisecondCheck").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
