@@ -1,10 +1,9 @@
 package com.dji.sdk.maldronesim;
 
-import java.util.Date;
-
 public class TSPI {
     StringBuffer loggedTSPI;
-    private Date timestamp;
+    private String header;
+    private long timestamp;
     private String gpsSignalStrength;
     private int satelliteCount;
 
@@ -29,9 +28,11 @@ public class TSPI {
 
     TSPI(){
         this.loggedTSPI = new StringBuffer();
+        this.header = "Date, GPSSignalStrength, SatteliteCount, Altitude, Latitude, Longitude\n";
+        this.loggedTSPI.append(header);
     }
 
-    public void setTimestamp(Date time){this.timestamp = time;}
+    public void setTimestamp(long time){this.timestamp = time;}
     public void setGpsSignalStrength(String GpsSignalStrength){this.gpsSignalStrength = GpsSignalStrength; }
     public void setSatelliteCount(int satelliteCount){this.satelliteCount = satelliteCount;}
 
@@ -77,13 +78,23 @@ public class TSPI {
     }
 
     public String logResults(){
-        loggedTSPI.delete(0, loggedTSPI.length());
-        loggedTSPI.append(timestamp).append(",");
-        loggedTSPI.append(gpsSignalStrength).append(",");
-        loggedTSPI.append(satelliteCount).append(",");
-        loggedTSPI.append(currentLatitude).append(",");
-        loggedTSPI.append(currentLongitude).append("\n");
+        if(loggedTSPI.length() == header.length()){
+            loggedTSPI.append(timestamp).append(",");
+            loggedTSPI.append(gpsSignalStrength).append(",");
+            loggedTSPI.append(satelliteCount).append(",");
+            loggedTSPI.append(currentAltitude).append(",");
+            loggedTSPI.append(currentLatitude).append(",");
+            loggedTSPI.append(currentLongitude).append("\n");
+        } else {
+            loggedTSPI.delete(0, loggedTSPI.length());
+            loggedTSPI.append(timestamp).append(",");
+            loggedTSPI.append(gpsSignalStrength).append(",");
+            loggedTSPI.append(satelliteCount).append(",");
+            loggedTSPI.append(currentAltitude).append(",");
+            loggedTSPI.append(currentLatitude).append(",");
+            loggedTSPI.append(currentLongitude).append("\n");
+        }
+
         return String.valueOf(loggedTSPI);
     }
-
 }
