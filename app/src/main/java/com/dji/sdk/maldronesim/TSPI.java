@@ -1,5 +1,7 @@
 package com.dji.sdk.maldronesim;
 
+import java.util.Date;
+
 public class TSPI {
     StringBuffer loggedTSPI;
     private String header;
@@ -32,7 +34,7 @@ public class TSPI {
         this.loggedTSPI.append(header);
     }
 
-    public void setTimestamp(long time){this.timestamp = time;}
+    public void setTimestamp(Date time){this.timestamp = time;}
     public void setGpsSignalStrength(String GpsSignalStrength){this.gpsSignalStrength = GpsSignalStrength; }
     public void setSatelliteCount(int satelliteCount){this.satelliteCount = satelliteCount;}
 

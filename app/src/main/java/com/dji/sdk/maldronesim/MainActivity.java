@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     LocationCoordinate3D locationCoordinate3D = djiFlightControllerCurrentState.getAircraftLocation();
                     Attitude attitude = djiFlightControllerCurrentState.getAttitude();
 
-                    mTSPI.setTimestamp(Calendar.getInstance().getTimeInMillis());
+                    mTSPI.setTimestamp(Calendar.getInstance().getTime());
                     mTSPI.setGpsSignalStrength(String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
                     mTSPI.setSatelliteCount(djiFlightControllerCurrentState.getSatelliteCount());
                     mTSPI.setCurrentLatitude(locationCoordinate3D.getLatitude());
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
-                        db.collection("mal_test3_millisecondCheck").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        db.collection("05241600_mal").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
