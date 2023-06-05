@@ -5,7 +5,7 @@ import java.util.Date;
 public class TSPI {
     StringBuffer loggedTSPI;
     private String header;
-    private long timestamp;
+    private Date timestamp;
     private String gpsSignalStrength;
     private int satelliteCount;
 

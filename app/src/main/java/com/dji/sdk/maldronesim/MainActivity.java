@@ -100,32 +100,36 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("(Thread)TSPILogger", "hello from logger");
 
 //                    쓰는 코드 입니다.
-                    HashMap result = new HashMap<>();
-                    result.put("Time",  Calendar.getInstance().getTimeInMillis());
-                    result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
-                    result.put("Altitude", locationCoordinate3D.getAltitude());
-                    result.put("Latitude", locationCoordinate3D.getLatitude());
-                    result.put("Longitude", locationCoordinate3D.getLongitude());
-                    result.put("Pitch", attitude.pitch);
-                    result.put("Yaw", attitude.yaw);
+//                    HashMap result = new HashMap<>();
+//                    result.put("Time",  Calendar.getInstance().getTimeInMillis());
+//                    result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
+//                    result.put("Altitude", locationCoordinate3D.getAltitude());
+//                    result.put("Latitude", locationCoordinate3D.getLatitude());
+//                    result.put("Longitude", locationCoordinate3D.getLongitude());
+//                    result.put("Pitch", attitude.pitch);
+//                    result.put("Yaw", attitude.yaw);
+//
+//
+//                    if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
+//                        db.collection("0526_flighttest").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                            @Override
+//                            public void onSuccess(DocumentReference documentReference) {
+//                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+//                            }
+//                        }).addOnFailureListener(new OnFailureListener() {
+//                            @Override
+//                            public void onFailure(@NonNull Exception e) {
+//                                Log.w(TAG, "Error adding document", e);
+//                            }
+//                        });
+//                    }
+//                    else{
+//                        System.out.println("Latitude and Logitude are NaN");
+//                    }
 
 
-                    if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
-                        db.collection("05241600_mal").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
-                    }
-                    else{
-                        System.out.println("Latitude and Logitude are NaN");
-                    }
+
+
 //                  여기까지 입니다.
 
 //                  안쓰는 코드 입니다.
