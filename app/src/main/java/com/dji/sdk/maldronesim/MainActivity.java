@@ -35,15 +35,17 @@ public class MainActivity extends AppCompatActivity {
     TSPI mTSPI;
     TextView logs;
     FlightController flightController;
+    String textview;
     private Context mContext;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         mTSPI = new TSPI();
         mContext = getApplicationContext();
         logs = (TextView) findViewById(R.id.view_log);
+
         initFlightControllerState();
     }
     public void writeLogfile(Context context, String filename, String content){
@@ -62,9 +64,12 @@ public class MainActivity extends AppCompatActivity {
     private void initFlightControllerState(){
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
+
         String strDate = dateFormat.format(date);
         String fileName = (strDate + ".csv");
+
         writeLogfile(mContext,fileName,mTSPI.logResults());
+
         Log.d("FlightControllerState", "connecting FlightController");
 
         try {
@@ -96,7 +101,22 @@ public class MainActivity extends AppCompatActivity {
                     mTSPI.setPitch(attitude.pitch);
                     mTSPI.setYaw(attitude.yaw);
 
+                    textview = "Time : " + String.valueOf(mTSPI.getTimestamp())
+                                + "\nLatitude : " + String.valueOf(mTSPI.getCurrentLatitude())
+                                + "\nLongitude : " + String.valueOf(mTSPI.getCurrentLongitude());
+
                     writeLogfile(mContext,fileName,mTSPI.logResults());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            logs.setText(textview);
+
+                        }
+                    });
+
+
                     Log.d("(Thread)TSPILogger", "hello from logger");
 
 //                    쓰는 코드 입니다.

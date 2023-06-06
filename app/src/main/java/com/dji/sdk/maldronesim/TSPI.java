@@ -60,6 +60,9 @@ public class TSPI {
     public void setRoll(double roll){
         this.roll = roll;
     }
+    public Date getTimestamp(){
+        return this.timestamp;
+    }
     public String getGpsSignalStrength(){
         return gpsSignalStrength;
     }
