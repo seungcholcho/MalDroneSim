@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     mTSPI.setCurrentLongitude(locationCoordinate3D.getLongitude());
 
                     mTSPI.setCurrentAltitude(locationCoordinate3D.getAltitude());
+                    mTSPI.setCurrentAltitude_seaTohome(djiFlightControllerCurrentState.getTakeoffLocationAltitude());
 
                     mTSPI.setPitch(attitude.pitch);
                     mTSPI.setYaw(attitude.yaw);
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                                 + "\nLatitude : " + String.valueOf(mTSPI.getCurrentLatitude())
                                 + "\nLongitude : " + String.valueOf(mTSPI.getCurrentLongitude());
 
-                    writeLogfile(mContext,fileName,mTSPI.logResults());
+                    writeLogfile(mContext, fileName, mTSPI.logResults());
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -120,32 +121,33 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("(Thread)TSPILogger", "hello from logger");
 
 //                    쓰는 코드 입니다.
-//                    HashMap result = new HashMap<>();
-//                    result.put("Time",  Calendar.getInstance().getTimeInMillis());
-//                    result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
-//                    result.put("Altitude", locationCoordinate3D.getAltitude());
-//                    result.put("Latitude", locationCoordinate3D.getLatitude());
-//                    result.put("Longitude", locationCoordinate3D.getLongitude());
-//                    result.put("Pitch", attitude.pitch);
-//                    result.put("Yaw", attitude.yaw);
-//
-//
-//                    if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
-//                        db.collection("0526_flighttest").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                            @Override
-//                            public void onSuccess(DocumentReference documentReference) {
-//                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                            }
-//                        }).addOnFailureListener(new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                Log.w(TAG, "Error adding document", e);
-//                            }
-//                        });
-//                    }
-//                    else{
-//                        System.out.println("Latitude and Logitude are NaN");
-//                    }
+                    HashMap result = new HashMap<>();
+                    result.put("Time",  Calendar.getInstance().getTimeInMillis());
+                    result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
+                    result.put("Altitude_seaTohome",djiFlightControllerCurrentState.getTakeoffLocationAltitude());
+                    result.put("Altitude", locationCoordinate3D.getAltitude());
+                    result.put("Latitude", locationCoordinate3D.getLatitude());
+                    result.put("Longitude", locationCoordinate3D.getLongitude());
+                    result.put("Pitch", attitude.pitch);
+                    result.put("Yaw", attitude.yaw);
+
+
+                    if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
+                        db.collection("0608_test00").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+                    }
+                    else{
+                        System.out.println("Latitude and Logitude are NaN");
+                    }
 
 
 

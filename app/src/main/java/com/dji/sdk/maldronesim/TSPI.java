@@ -16,8 +16,7 @@ public class TSPI {
     private double currentLatitude;
     private double currentLongitude;
     private double currentAltitude;
-
-    private double sealevelAltitude;
+    private double currentAltitude_seaTohome;
 
     private double pitch;
     private double yaw;
@@ -30,7 +29,7 @@ public class TSPI {
 
     TSPI(){
         this.loggedTSPI = new StringBuffer();
-        this.header = "Date, GPSSignalStrength, SatteliteCount, Altitude, Latitude, Longitude\n";
+        this.header = "Date,GPSSignalStrength,SatteliteCount,Altitude,Latitude,Longitude\n";
         this.loggedTSPI.append(header);
     }
 
@@ -51,6 +50,11 @@ public class TSPI {
     public void setCurrentAltitude(double altitude){
         this.currentAltitude = altitude;
     }
+
+    public void setCurrentAltitude_seaTohome(double altitude_seaTohome){
+        this.currentAltitude_seaTohome = altitude_seaTohome;
+    }
+
     public void setPitch(double pitch){
         this.pitch = pitch;
     }
