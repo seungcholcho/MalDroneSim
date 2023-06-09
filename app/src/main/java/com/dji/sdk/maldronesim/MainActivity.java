@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
-                        db.collection("0608_test00").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        db.collection("0609_test5_").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
