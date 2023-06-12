@@ -90,7 +90,10 @@ public class MainActivity extends AppCompatActivity {
                     LocationCoordinate3D locationCoordinate3D = djiFlightControllerCurrentState.getAircraftLocation();
                     Attitude attitude = djiFlightControllerCurrentState.getAttitude();
 
-                    mTSPI.setTimestamp(Calendar.getInstance().getTime());
+                    Date currentDate = Calendar.getInstance().getTime();
+                    DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
+
+                    mTSPI.setTimestamp(dateFormat.format(currentDate));
                     mTSPI.setGpsSignalStrength(String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
                     mTSPI.setSatelliteCount(djiFlightControllerCurrentState.getSatelliteCount());
                     mTSPI.setCurrentLatitude(locationCoordinate3D.getLatitude());
@@ -122,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
 //                    쓰는 코드 입니다.
                     HashMap result = new HashMap<>();
-                    result.put("Time",  Calendar.getInstance().getTimeInMillis());
+                    result.put("Time",  mTSPI.getTimestamp());
                     result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
                     result.put("Altitude_seaTohome",djiFlightControllerCurrentState.getTakeoffLocationAltitude());
                     result.put("Altitude", locationCoordinate3D.getAltitude());
@@ -133,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
-                        db.collection("0609_test5_").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        db.collection("timeTest").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());

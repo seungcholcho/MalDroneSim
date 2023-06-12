@@ -5,7 +5,7 @@ import java.util.Date;
 public class TSPI {
     StringBuffer loggedTSPI;
     private String header;
-    private Date timestamp;
+    private String timestamp;
     private String gpsSignalStrength;
     private int satelliteCount;
 
@@ -33,7 +33,7 @@ public class TSPI {
         this.loggedTSPI.append(header);
     }
 
-    public void setTimestamp(Date time){this.timestamp = time;}
+    public void setTimestamp(String time){this.timestamp = time;}
     public void setGpsSignalStrength(String GpsSignalStrength){this.gpsSignalStrength = GpsSignalStrength; }
     public void setSatelliteCount(int satelliteCount){this.satelliteCount = satelliteCount;}
 
@@ -64,7 +64,7 @@ public class TSPI {
     public void setRoll(double roll){
         this.roll = roll;
     }
-    public Date getTimestamp(){
+    public String getTimestamp(){
         return this.timestamp;
     }
     public String getGpsSignalStrength(){
