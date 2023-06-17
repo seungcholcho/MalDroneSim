@@ -33,44 +33,67 @@ import dji.sdk.sdkmanager.DJISDKManager;
 
 public class MainActivity extends AppCompatActivity {
     TSPI mTSPI;
-    TextView logs;
     FlightController flightController;
     String textview;
+
+    private TextView currentTime;
+    private TextView longitude;
+    private TextView latitude;
+    private TextView altitude_seaTodrone;
+    private TextView altitude;
+    private TextView databaseState;
+
     private Context mContext;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initUI();
         mTSPI = new TSPI();
-        mContext = getApplicationContext();
-        logs = (TextView) findViewById(R.id.view_log);
+        getFlightControllerState();
 
-        initFlightControllerState();
+        //To write Log file
+        mContext = getApplicationContext();
     }
+
+    private void initUI() {
+
+        databaseState = findViewById(R.id.text_DB_connect);
+        currentTime = findViewById(R.id.text_time);
+        longitude = findViewById(R.id.text_longditude);
+        latitude = findViewById(R.id.text_latitude);
+        altitude_seaTodrone = findViewById(R.id.text_altitude);
+        altitude = findViewById(R.id.text_altitude_over_sea);
+
+    }
+
+    //Write log file
     public void writeLogfile(Context context, String filename, String content){
         String data = content;
         FileOutputStream outputStream;
-        try{
-            outputStream = context.openFileOutput(filename, Context.MODE_APPEND);
-            outputStream.write(data.getBytes());
-            outputStream.close();
-            Log.d("filewrite","success" + filename);
-        }catch(IOException e){
-            Log.d("filewrite","failed");
-            e.printStackTrace();
-        }
+//        try{
+//            outputStream = context.openFileOutput(filename, Context.MODE_APPEND);
+//            outputStream.write(data.getBytes());
+//            outputStream.close();
+//            Log.d("filewrite","success" + filename);
+//        }catch(IOException e){
+//            Log.d("filewrite","failed");
+//            e.printStackTrace();
+//        }
     }
-    private void initFlightControllerState(){
+
+
+    //In order to use the API provided by DJI, the request is sent once every 0.1 seconds using the Callback function.
+    //Return values include the connection status of the controller and TSPI data of the drone.
+    private void getFlightControllerState(){
+        //Get current time
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("yyMMddHHmmss");
-
         String strDate = dateFormat.format(date);
         String fileName = (strDate + ".csv");
 
         writeLogfile(mContext,fileName,mTSPI.logResults());
-
-        Log.d("FlightControllerState", "connecting FlightController");
 
         try {
             flightController = ((Aircraft) DJISDKManager.getInstance().getProduct()).getFlightController();
@@ -102,9 +125,6 @@ public class MainActivity extends AppCompatActivity {
                     mTSPI.setCurrentAltitude(locationCoordinate3D.getAltitude());
                     mTSPI.setCurrentAltitude_seaTohome(djiFlightControllerCurrentState.getTakeoffLocationAltitude());
 
-                    mTSPI.setPitch(attitude.pitch);
-                    mTSPI.setYaw(attitude.yaw);
-
                     textview = "Time : " + String.valueOf(mTSPI.getTimestamp())
                                 + "\nLatitude : " + String.valueOf(mTSPI.getCurrentLatitude())
                                 + "\nLongitude : " + String.valueOf(mTSPI.getCurrentLongitude());
@@ -115,15 +135,18 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void run() {
 
-                            logs.setText(textview);
+                            databaseState.setText("DB conneced : Ture");
+                            currentTime.setText("Current time : " + mTSPI.getTimestamp());
+                            longitude.setText("Longittude : " + mTSPI.getCurrentLongitude());
+                            latitude.setText("Latitude : " + mTSPI.getCurrentLatitude());
+                            altitude_seaTodrone.setText("Altitude(over the sea) : " + mTSPI.getCurrentAltitude_seaTohome());
+                            altitude.setText("Altitude : " + mTSPI.getCurrentAltitude());
 
                         }
                     });
 
 
-                    Log.d("(Thread)TSPILogger", "hello from logger");
-
-//                    쓰는 코드 입니다.
+                    //Save data as hash values
                     HashMap result = new HashMap<>();
                     result.put("Time",  mTSPI.getTimestamp());
                     result.put("GpsSignal", String.valueOf(djiFlightControllerCurrentState.getGPSSignalLevel()));
@@ -135,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     result.put("Yaw", attitude.yaw);
 
 
+                    //When the latitude and longitude are not null, TSPI data is sent to the database.
                     if (!(isNaN((double)result.get("Latitude"))) && !(isNaN((double)result.get("Longitude")))){
                         db.collection("0614_test_2000_1").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
@@ -151,24 +175,6 @@ public class MainActivity extends AppCompatActivity {
                     else{
                         System.out.println("Latitude and Logitude are NaN");
                     }
-
-
-
-
-//                  여기까지 입니다.
-
-//                  안쓰는 코드 입니다.
-//                    db.collection("mal_drone_test1").add(result).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                        @Override
-//                        public void onSuccess(DocumentReference documentReference) {
-//                            Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-//                        }
-//                    }).addOnFailureListener(new OnFailureListener() {
-//                        @Override
-//                        public void onFailure(@NonNull Exception e) {
-//                            Log.w(TAG, "Error adding document", e);
-//                        }
-//                    });
                 }
             });
         }

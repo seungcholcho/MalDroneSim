@@ -6,10 +6,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,8 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +84,6 @@ public class RegisterActivity extends AppCompatActivity {
                 RegisterActivity.this.startActivity(intent);
             }
         });
-
         checkAndRequestPermissions();
     }
 
@@ -159,32 +153,18 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onProductDisconnect() {
                             Log.d(TAG, "onProductDisconnect");
                             showToast("Product Disconnected");
-                            notifyStatusChange();
                         }
                         @Override
                         public void onProductConnect(BaseProduct baseProduct) {
                             Log.d(TAG, String.format("onProductConnect newProduct:%s", baseProduct));
                             showToast("Product Connected:"+baseProduct);
-                            notifyStatusChange();
-
-//                            Log.d("onProductConnect",String.valueOf(baseProduct));
-//                            Log.d("onProductConnect",String.valueOf(mProduct));
 
                             //Update Text in Register Page
                             refreshSDKRelativeUI();
-
-                            // start home activity when product is connected
-                            // UNCOMMENT IT ONLY IF THE DEVICE IS CONNECTED TO THE DRONE.
-
-//                                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-//                                MainActivity.this.startActivity(intent);
-
                         }
 
                         @Override
                         public void onProductChanged(BaseProduct baseProduct) {
-                            //showToast("hello from onProductChanged");
-                            notifyStatusChange();
                         }
 
 
@@ -198,7 +178,6 @@ public class RegisterActivity extends AppCompatActivity {
                                     @Override
                                     public void onConnectivityChange(boolean isConnected) {
                                         Log.d(TAG, "onComponentConnectivityChanged: " + isConnected);
-                                        notifyStatusChange();
                                     }
                                 });
                             }
@@ -223,14 +202,7 @@ public class RegisterActivity extends AppCompatActivity {
             });
         }
     }
-    private void notifyStatusChange() {
-        //showToast("hello from notify status");
-        //mHandler.removeCallbacks(updateRunnable);
-        //mHandler.postDelayed(updateRunnable, 500);
-    }
 
-
-    //Register 글자 변경
     private void refreshSDKRelativeUI() {
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -261,17 +233,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-        //BaseProduct mProduct = MApplication.getProductInstance();
-
     }
-
-    private Runnable updateRunnable = new Runnable() {
-        @Override
-        public void run() {
-            Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
-            sendBroadcast(intent);
-        }
-    };
 
     private void showToast(final String toastMsg) {
         Handler handler = new Handler(Looper.getMainLooper());
